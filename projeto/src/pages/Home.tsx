@@ -581,8 +581,8 @@ export default function Home() {
           </div>
 
           <div className="footer-bottom">
-            <p>Feito com 💚 na aula de Programação Web</p>
-            <p>©2024 EcoTech - Todos os direitos reservados.</p>
+            <p>Feito com Braian Gaspar</p>
+            <p>©2026 EcoTech - Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
