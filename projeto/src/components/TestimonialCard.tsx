@@ -21,7 +21,7 @@ export default function TestimonialCard({
       stars.push(
         <img
           key={i}
-          src={i < rating ? "assets/star.svg" : "assets/star-empty.svg"}
+          src={i < rating ? "/assets/star.svg" : "/assets/star-empty.svg"}
           alt={i < rating ? "ícone estrela" : "ícone estrela vazia"}
           width={22}
           height={20}
