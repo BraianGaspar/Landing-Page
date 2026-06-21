@@ -79,7 +79,9 @@ const handler: Handler = async (event: HandlerEvent) => {
       from: `"DonaFrost" <${process.env.SMTP_USER}>`,
       replyTo: email,
       to: process.env.CONTACT_EMAIL,
-      subject: subject ? `[DonaFrost] ${subject}` : "[DonaFrost] Nova mensagem da Landing Page",
+      subject: subject
+        ? `[DonaFrost] ${subject}`
+        : "[DonaFrost] Nova mensagem da Landing Page",
       text: `E-mail: ${email}\n\nMensagem:\n${message}`,
       html: `
         <h2>Nova mensagem de contato</h2>
@@ -92,9 +94,9 @@ const handler: Handler = async (event: HandlerEvent) => {
     return {
       statusCode: 200,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         success: true,
-        message: "E-mail enviado com sucesso!" 
+        message: "E-mail enviado com sucesso!",
       }),
     };
   } catch (error) {
@@ -102,8 +104,8 @@ const handler: Handler = async (event: HandlerEvent) => {
     return {
       statusCode: 500,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ 
-        error: "Falha ao enviar o e-mail. Tente novamente mais tarde." 
+      body: JSON.stringify({
+        error: "Falha ao enviar o e-mail. Tente novamente mais tarde.",
       }),
     };
   }
