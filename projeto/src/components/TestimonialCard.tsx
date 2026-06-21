@@ -7,25 +7,25 @@ interface ITestimonialCardProps {
   alt: string;
 }
 
-export default function TestimonialCard({ 
-  image, 
-  name, 
-  role, 
-  testimony, 
-  rating, 
-  alt 
+export default function TestimonialCard({
+  image,
+  name,
+  role,
+  testimony,
+  rating,
+  alt,
 }: ITestimonialCardProps) {
   const renderStars = () => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       stars.push(
-        <img 
+        <img
           key={i}
-          src={i < rating ? "/src/assets/star.svg" : "/src/assets/star-empty.svg"}
+          src={i < rating ? "assets/star.svg" : "assets/star-empty.svg"}
           alt={i < rating ? "ícone estrela" : "ícone estrela vazia"}
           width={22}
           height={20}
-        />
+        />,
       );
     }
     return stars;
@@ -37,9 +37,7 @@ export default function TestimonialCard({
       <span className="testimony">
         <p>{testimony}</p>
       </span>
-      <span className="rating">
-        {renderStars()}
-      </span>
+      <span className="rating">{renderStars()}</span>
       <span className="names">
         <p>{name}</p>
         <p>{role}</p>

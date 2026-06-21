@@ -42,7 +42,12 @@ export default function PricingCard({
       <span className="hr" />
       {features.map((feature, index) => (
         <span className="features" key={index}>
-          <img src="/src/assets/check.svg" alt="ícone check" width={24} height={24} />
+          <img
+            src="assets/check.svg"
+            alt="ícone check"
+            width={24}
+            height={24}
+          />
           <p>{feature}</p>
         </span>
       ))}
