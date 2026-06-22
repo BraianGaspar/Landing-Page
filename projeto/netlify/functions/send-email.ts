@@ -1,5 +1,5 @@
-import type { Handler, HandlerEvent } from "@netlify/functions";
-import nodemailer from "nodemailer";
+import type { Handler, HandlerEvent } from '@netlify/functions';
+import nodemailer from 'nodemailer';
 
 interface ContactPayload {
   email: string;
@@ -7,41 +7,66 @@ interface ContactPayload {
   subject?: string;
 }
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "";
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? '';
 
 const corsHeaders = (origin: string) => ({
-  "Access-Control-Allow-Origin": ALLOWED_ORIGIN || origin,
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  'Access-Control-Allow-Origin': ALLOWED_ORIGIN || origin,
+  'Access-Control-Allow-Headers': 'Content-Type, x-recaptcha-token',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 });
 
 const handler: Handler = async (event: HandlerEvent) => {
-  const origin = event.headers["origin"] ?? "";
+  const origin = event.headers['origin'] ?? '';
 
-  if (event.httpMethod === "OPTIONS") {
+  // OPTIONS preflight
+  if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
       headers: corsHeaders(origin),
-      body: "",
+      body: '',
     };
   }
 
-  if (event.httpMethod !== "POST") {
+  if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ error: "Método não permitido." }),
+      body: JSON.stringify({ error: 'Método não permitido.' }),
     };
   }
 
+  // VALIDAÇÃO DO reCAPTCHA
+  const recaptchaToken = event.headers['x-recaptcha-token'];
+
+  if (recaptchaToken) {
+    try {
+      const verification = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+        { method: 'POST' }
+      );
+      const result = await verification.json();
+
+      if (!result.success) {
+        return {
+          statusCode: 400,
+          headers: corsHeaders(origin),
+          body: JSON.stringify({ error: 'reCAPTCHA inválido. Tente novamente.' }),
+        };
+      }
+    } catch (error) {
+      console.error('Erro ao verificar reCAPTCHA:', error);
+    }
+  }
+
+  // Resto do código igual...
   let payload: ContactPayload;
   try {
-    payload = JSON.parse(event.body ?? "{}");
+    payload = JSON.parse(event.body ?? '{}');
   } catch {
     return {
       statusCode: 400,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ error: "Body inválido." }),
+      body: JSON.stringify({ error: 'Body inválido.' }),
     };
   }
 
@@ -51,7 +76,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     return {
       statusCode: 422,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ error: "Campos obrigatórios: email, message." }),
+      body: JSON.stringify({ error: 'Campos obrigatórios: email, message.' }),
     };
   }
 
@@ -60,14 +85,14 @@ const handler: Handler = async (event: HandlerEvent) => {
     return {
       statusCode: 422,
       headers: corsHeaders(origin),
-      body: JSON.stringify({ error: "E-mail inválido." }),
+      body: JSON.stringify({ error: 'E-mail inválido.' }),
     };
   }
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT ?? 587),
-    secure: process.env.SMTP_SECURE === "true",
+    secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -76,18 +101,16 @@ const handler: Handler = async (event: HandlerEvent) => {
 
   try {
     await transporter.sendMail({
-      from: `"DonaFrost" <${process.env.SMTP_USER}>`,
+      from: `"EcoTech" <${process.env.SMTP_USER}>`,
       replyTo: email,
       to: process.env.CONTACT_EMAIL,
-      subject: subject
-        ? `[DonaFrost] ${subject}`
-        : "[DonaFrost] Nova mensagem da Landing Page",
+      subject: subject ? `[EcoTech] ${subject}` : '[EcoTech] Nova mensagem da Landing Page',
       text: `E-mail: ${email}\n\nMensagem:\n${message}`,
       html: `
         <h2>Nova mensagem de contato</h2>
         <p><strong>E-mail:</strong> ${email}</p>
         <p><strong>Mensagem:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
       `,
     });
 
@@ -96,16 +119,16 @@ const handler: Handler = async (event: HandlerEvent) => {
       headers: corsHeaders(origin),
       body: JSON.stringify({
         success: true,
-        message: "E-mail enviado com sucesso!",
+        message: 'E-mail enviado com sucesso!',
       }),
     };
   } catch (error) {
-    console.error("Erro ao enviar e-mail:", error);
+    console.error('Erro ao enviar e-mail:', error);
     return {
       statusCode: 500,
       headers: corsHeaders(origin),
       body: JSON.stringify({
-        error: "Falha ao enviar o e-mail. Tente novamente mais tarde.",
+        error: 'Falha ao enviar o e-mail. Tente novamente mais tarde.',
       }),
     };
   }
