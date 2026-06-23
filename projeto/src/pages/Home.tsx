@@ -52,7 +52,6 @@ export default function Home() {
       'Content-Type': 'application/json',
     };
 
-    // Se tiver token do reCAPTCHA, enviar no header
     if (recaptchaToken) {
       headers['x-recaptcha-token'] = recaptchaToken;
     }
@@ -361,7 +360,7 @@ export default function Home() {
         </section>
       </section>
 
-      {/* Contact Section com reCAPTCHA */}
+      {/* Contact Section */}
       <section id="contact">
         <div className="container">
           <header>

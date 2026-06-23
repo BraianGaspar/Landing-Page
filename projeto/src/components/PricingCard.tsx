@@ -1,4 +1,5 @@
-import Button from "./Button";
+import Button from './Button';
+import checkIcon from '../assets/check.svg';
 
 interface IPricingCardProps {
   name: string;
@@ -16,7 +17,7 @@ export default function PricingCard({
   name,
   description,
   price,
-  priceUnit = "",
+  priceUnit = '',
   features,
   isPremium = false,
   bonus,
@@ -24,7 +25,7 @@ export default function PricingCard({
   buttonSecondary = false,
 }: IPricingCardProps) {
   return (
-    <div className={`pricing-card ${isPremium ? "premium" : ""}`}>
+    <div className={`pricing-card ${isPremium ? 'premium' : ''}`}>
       {bonus && (
         <span className="bonus">
           <p>{bonus}</p>
@@ -42,12 +43,7 @@ export default function PricingCard({
       <span className="hr" />
       {features.map((feature, index) => (
         <span className="features" key={index}>
-          <img
-            src="/assets/check.svg"
-            alt="ícone check"
-            width={24}
-            height={24}
-          />
+          <img src={checkIcon} alt="ícone check" width={24} height={24} />
           <p>{feature}</p>
         </span>
       ))}

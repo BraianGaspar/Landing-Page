@@ -1,3 +1,6 @@
+import starIcon from '../assets/star.svg';
+import starEmptyIcon from '../assets/star-empty.svg';
+
 interface ITestimonialCardProps {
   image: string;
   name: string;
@@ -21,11 +24,11 @@ export default function TestimonialCard({
       stars.push(
         <img
           key={i}
-          src={i < rating ? "/assets/star.svg" : "/assets/star-empty.svg"}
-          alt={i < rating ? "ícone estrela" : "ícone estrela vazia"}
+          src={i < rating ? starIcon : starEmptyIcon}
+          alt={i < rating ? 'ícone estrela' : 'ícone estrela vazia'}
           width={22}
           height={20}
-        />,
+        />
       );
     }
     return stars;

@@ -1,4 +1,4 @@
-import { useState, useRef, FormEvent, useEffect } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Button from './Button';
 
@@ -11,8 +11,7 @@ interface ContactFormProps {
   ) => Promise<void>;
 }
 
-// LER DO .env COM FALLBACK
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
 
 export default function ContactForm({ onSendEmail }: ContactFormProps) {
   const [email, setEmail] = useState('');
@@ -27,23 +26,10 @@ export default function ContactForm({ onSendEmail }: ContactFormProps) {
     message: '',
   });
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-  const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  // Verificar se o reCAPTCHA foi carregado
-  useEffect(() => {
-    // Forçar o carregamento do reCAPTCHA
-    const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-
-    setCaptchaLoaded(true);
-  }, []);
-
   const handleCaptchaChange = (token: string | null) => {
-    console.log('✅ Token do reCAPTCHA recebido:', token);
+    console.log('✅ Token do reCAPTCHA recebido');
     setIsCaptchaValid(!!token);
   };
 
@@ -63,7 +49,6 @@ export default function ContactForm({ onSendEmail }: ContactFormProps) {
 
     try {
       const token = recaptchaRef.current?.getValue() || undefined;
-
       await onSendEmail(email, message, subject, token);
 
       setSendStatus({
@@ -86,7 +71,10 @@ export default function ContactForm({ onSendEmail }: ContactFormProps) {
     }
   };
 
-  console.log('🔑 Site Key:', RECAPTCHA_SITE_KEY);
+  // Se não tiver chave, mostrar aviso
+  if (!RECAPTCHA_SITE_KEY) {
+    console.warn('⚠️ VITE_RECAPTCHA_SITE_KEY não configurada no .env');
+  }
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
@@ -125,22 +113,14 @@ export default function ContactForm({ onSendEmail }: ContactFormProps) {
         />
       </div>
 
-      {/* reCAPTCHA - COM FALLBACK */}
-      <div
-        style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0', minHeight: '78px' }}
-      >
-        {RECAPTCHA_SITE_KEY ? (
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY}
-            onChange={handleCaptchaChange}
-            theme="light"
-            size="normal"
-            asyncScriptOnLoad={() => console.log('✅ reCAPTCHA carregado!')}
-          />
-        ) : (
-          <p style={{ color: 'red' }}>⚠️ Chave do reCAPTCHA não configurada</p>
-        )}
+      {/* reCAPTCHA */}
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={RECAPTCHA_SITE_KEY}
+          onChange={handleCaptchaChange}
+          theme="light"
+        />
       </div>
 
       <Button
