@@ -11,14 +11,13 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? '';
 
 const corsHeaders = (origin: string) => ({
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN || origin,
-  'Access-Control-Allow-Headers': 'Content-Type, x-recaptcha-token',
+  'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 });
 
 const handler: Handler = async (event: HandlerEvent) => {
   const origin = event.headers['origin'] ?? '';
 
-  // OPTIONS preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
@@ -35,30 +34,6 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
-  // VALIDAÇÃO DO reCAPTCHA
-  const recaptchaToken = event.headers['x-recaptcha-token'];
-
-  if (recaptchaToken) {
-    try {
-      const verification = await fetch(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
-        { method: 'POST' }
-      );
-      const result = await verification.json();
-
-      if (!result.success) {
-        return {
-          statusCode: 400,
-          headers: corsHeaders(origin),
-          body: JSON.stringify({ error: 'reCAPTCHA inválido. Tente novamente.' }),
-        };
-      }
-    } catch (error) {
-      console.error('Erro ao verificar reCAPTCHA:', error);
-    }
-  }
-
-  // Resto do código igual...
   let payload: ContactPayload;
   try {
     payload = JSON.parse(event.body ?? '{}');
