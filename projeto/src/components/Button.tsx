@@ -6,7 +6,6 @@ interface IButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'disabled';
 }
 
 export default function Button({
@@ -15,9 +14,7 @@ export default function Button({
   disabled = false,
   onClick,
   type = 'button',
-  variant,
 }: IButtonProps) {
-  // Se disabled for true, usa a classe disabled-btn
   const buttonClass = disabled ? 'btn-disabled' : secondary ? 'btn-secondary' : 'btn-primary';
 
   return (
