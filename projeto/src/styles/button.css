@@ -1,3 +1,25 @@
+.btn-disabled {
+  width: 100%;
+  background: #cccccc;
+  color: #999999;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  padding-block: 0.825rem;
+  padding-inline: 1.5rem;
+  border-radius: 0.4rem;
+  cursor: not-allowed;
+  border: solid transparent 0.15rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.btn-disabled:hover {
+  background: #cccccc;
+  color: #999999;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-primary {
   width: 100%;
   background: var(--primary-color);
@@ -9,6 +31,7 @@
   border-radius: 0.4rem;
   cursor: pointer;
   border: solid transparent 0.15rem;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -28,6 +51,7 @@
   border-radius: 0.4rem;
   cursor: pointer;
   border: solid var(--primary-color) 0.15rem;
+  transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {

@@ -26,8 +26,7 @@ export default function TestimonialCard({
           key={i}
           src={i < rating ? starIcon : starEmptyIcon}
           alt={i < rating ? 'ícone estrela' : 'ícone estrela vazia'}
-          width={22}
-          height={20}
+          className="star-icon"
         />
       );
     }
@@ -36,14 +35,14 @@ export default function TestimonialCard({
 
   return (
     <div className="carousel-card">
-      <img src={image} alt={alt} />
+      <img src={image} alt={alt} className="profile-image" />
       <span className="testimony">
         <p>{testimony}</p>
       </span>
       <span className="rating">{renderStars()}</span>
       <span className="names">
-        <p>{name}</p>
-        <p>{role}</p>
+        <p className="name">{name}</p>
+        <p className="role">{role}</p>
       </span>
     </div>
   );

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <!-- Folha grande -->
+  <g opacity="0.15">
+    <path d="M150 380 
+             C150 320 200 260 230 200 
+             C260 140 240 80 200 50 
+             C180 35 160 30 150 40 
+             C140 30 120 35 100 50 
+             C60 80 40 140 70 200 
+             C100 260 150 320 150 380Z" 
+          fill="#2E8B57"/>
+    <!-- Nervuras da folha -->
+    <line x1="150" y1="380" x2="150" y2="60" stroke="#1a6b3a" stroke-width="2" opacity="0.5"/>
+    <line x1="150" y1="200" x2="120" y2="140" stroke="#1a6b3a" stroke-width="1.5" opacity="0.4"/>
+    <line x1="150" y1="200" x2="180" y2="140" stroke="#1a6b3a" stroke-width="1.5" opacity="0.4"/>
+    <line x1="150" y1="160" x2="130" y2="100" stroke="#1a6b3a" stroke-width="1.5" opacity="0.3"/>
+    <line x1="150" y1="160" x2="170" y2="100" stroke="#1a6b3a" stroke-width="1.5" opacity="0.3"/>
+  </g>
+  <!-- Pequena folha secundária -->
+  <g opacity="0.1" transform="translate(30, -20) scale(0.6)">
+    <path d="M150 380 C150 320 200 260 230 200 C260 140 240 80 200 50 C180 35 160 30 150 40 C140 30 120 35 100 50 C60 80 40 140 70 200 C100 260 150 320 150 380Z" fill="#3CA55C"/>
+  </g>
+  <!-- Círculos decorativos -->
+  <circle cx="250" cy="100" r="30" fill="#A8D5BA" opacity="0.12"/>
+  <circle cx="40" cy="300" r="20" fill="#A8D5BA" opacity="0.1"/>
+  <circle cx="270" cy="250" r="15" fill="#2E8B57" opacity="0.08"/>
+</svg>

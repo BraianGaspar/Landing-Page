@@ -5,6 +5,8 @@ import Logo from '../assets/logo.png';
 import Menu from '../assets/hamburguer.svg';
 import Close from '../assets/close.svg';
 import Leaf from '../assets/leaf.svg';
+import HeroLeafLeft from '../assets/images/hero-leaf.svg';
+import HeroLeafRight from '../assets/images/hero-leaf.svg';
 
 // Components
 import Button from '../components/Button';
@@ -24,9 +26,9 @@ import '../styles/footer.css';
 import '../styles/utility.css';
 
 // Mock images for testimonials
-import ProfileImageOne from '../assets/images/profile1.svg';
-import ProfileImageTwo from '../assets/images/profile2.svg';
-import ProfileImageThree from '../assets/images/profile3.svg';
+const ProfileImageOne = 'https://i.pravatar.cc/150?img=1';
+const ProfileImageTwo = 'https://i.pravatar.cc/150?img=2';
+const ProfileImageThree = 'https://i.pravatar.cc/150?img=3';
 
 export default function Home() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -78,7 +80,7 @@ export default function Home() {
       {/* Header */}
       <header className="container py-sm">
         <nav className="flex items-center justify-between">
-          <img src={Logo} alt="Logo EcoTech" style={{ height: '60px', width: 'auto' }} />
+          <img src={Logo} alt="Logo EcoTech" style={{ height: '65px', width: 'auto' }} />
 
           <div className="desktop-only">
             <ul className="flex gap-1">
@@ -190,8 +192,16 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section com folhas decorativas no topo */}
       <section id="hero">
+        {/* Decorações - APENAS NO TOPO */}
+        <div className="hero-decorations">
+          <img src={HeroLeafLeft} alt="Decoração folha" className="hero-leaf-left" />
+          <img src={HeroLeafRight} alt="Decoração folha" className="hero-leaf-right" />
+          <div className="hero-circle-1"></div>
+          <div className="hero-circle-2"></div>
+        </div>
+
         <div className="container content">
           <p className="desktop-only">🌱 Tecnologia para um futuro melhor</p>
           <h1>
@@ -475,7 +485,7 @@ export default function Home() {
           </div>
 
           <div className="footer-bottom">
-            <p>Feito com Braian Gaspar</p>
+            <p>Feito por Braian Gaspar</p>
             <p>©2026 EcoTech - Todos os direitos reservados.</p>
           </div>
         </div>
