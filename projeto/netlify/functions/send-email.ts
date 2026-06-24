@@ -75,7 +75,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   });
 
   try {
-    await transporter.sendMail({
+    const mailOptions = {
       from: `"EcoTech" <${process.env.SMTP_USER}>`,
       replyTo: email,
       to: process.env.CONTACT_EMAIL,
@@ -87,7 +87,9 @@ const handler: Handler = async (event: HandlerEvent) => {
         <p><strong>Mensagem:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
       `,
-    });
+    };
+
+    const info = await transporter.sendMail(mailOptions);
 
     return {
       statusCode: 200,
@@ -95,15 +97,29 @@ const handler: Handler = async (event: HandlerEvent) => {
       body: JSON.stringify({
         success: true,
         message: 'E-mail enviado com sucesso!',
+        messageId: info.messageId,
       }),
     };
   } catch (error) {
-    console.error('Erro ao enviar e-mail:', error);
+    // Verificar se é erro de autenticação
+    if (error instanceof Error) {
+      if (error.message.includes('Invalid login') || error.message.includes('535')) {
+        return {
+          statusCode: 401,
+          headers: corsHeaders(origin),
+          body: JSON.stringify({
+            error: 'Falha na autenticação. Verifique sua senha de app do Gmail.',
+          }),
+        };
+      }
+    }
+
     return {
       statusCode: 500,
       headers: corsHeaders(origin),
       body: JSON.stringify({
         error: 'Falha ao enviar o e-mail. Tente novamente mais tarde.',
+        details: error instanceof Error ? error.message : 'Erro desconhecido',
       }),
     };
   }
